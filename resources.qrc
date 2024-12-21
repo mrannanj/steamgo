@@ -1,0 +1,6 @@
+<RCC>
+    <qresource>
+        <file>images/black.png</file>
+        <file>images/board.png</file>
+    </qresource>
+</RCC>
