@@ -1,5 +1,6 @@
 #include "boardviewer.h"
 #include "gamestate.h"
+#include <cstdlib>
 #include <QPainter>
 #include <QPaintEvent>
 
@@ -10,8 +11,14 @@ BoardViewer::BoardViewer(QWidget *parent, GameState& gameState):
     mWhiteImage(":/images/white.png"),
     mGameState(gameState)
 {
-    setWindowTitle("Go Board");
-    resize(608, 608);
+}
+
+void BoardViewer::placeRandomStone() {
+    unsigned row = rand() % (kBoardSize + 1);
+    unsigned col = rand() % (kBoardSize + 1);
+    unsigned stone = 1 + (rand() % 2);
+    mGameState.board[row][col] = static_cast<Stone>(stone);
+    update();
 }
 
 void BoardViewer::paintEvent(QPaintEvent *event) {
@@ -28,8 +35,6 @@ void BoardViewer::paintEvent(QPaintEvent *event) {
         return;
     }
 
-    int rows = kBoardSize;
-    int cols = kBoardSize;
     QSize boardSize = mBoardImage.size().scaled(size(), Qt::KeepAspectRatio);
 
     int bgX = (this->width() - boardSize.width()) / 2;
@@ -37,14 +42,14 @@ void BoardViewer::paintEvent(QPaintEvent *event) {
 
     painter.drawPixmap(bgX, bgY, boardSize.width(), boardSize.height(), mBoardImage);
 
-    int cellWidth = boardSize.width() / cols;
-    int cellHeight = boardSize.height() / rows;
+    int cellWidth = boardSize.width() / kBoardSize;
+    int cellHeight = boardSize.height() / kBoardSize;
 
     QPixmap scaledBlack = mBlackImage.scaled(cellWidth, cellHeight, Qt::KeepAspectRatio);
     QPixmap scaledWhite = mWhiteImage.scaled(cellWidth, cellHeight, Qt::KeepAspectRatio);
 
-    for (int row = 0; row < rows; ++row) {
-        for (int col = 0; col < cols; ++col) {
+    for (unsigned row = 0; row < kBoardSize; ++row) {
+        for (unsigned col = 0; col < kBoardSize; ++col) {
             int x = bgX + col * cellWidth + (cellWidth - scaledBlack.width()) / 2;
             int y = bgY + row * cellHeight + (cellHeight - scaledBlack.height()) / 2;
 
