@@ -1,13 +1,14 @@
+#include <ctime>
+#include <cstdlib>
 #include <QtWidgets/QtWidgets>
-#include "boardviewer.h"
-#include "gamestate.h"
+#include "mainwindow.h"
 
 int main(int argc, char *argv[]) {
+    std::srand(std::time(0));
     QApplication app(argc, argv);
 
-    GameState gameState;
-    BoardViewer viewer(nullptr, gameState);
-    viewer.show();
+    MainWindow mainWindow;
+    mainWindow.show();
 
     return app.exec();
 }

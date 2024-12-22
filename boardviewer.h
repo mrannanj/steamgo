@@ -11,6 +11,9 @@ class BoardViewer : public QWidget {
 public:
     BoardViewer(QWidget *parent, GameState& gameState);
 
+public slots:
+    void placeRandomStone();
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 

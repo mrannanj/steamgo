@@ -15,6 +15,7 @@ set(CMAKE_AUTOUIC ON)
 
 qt_add_executable(trollgo
     main.cpp
+    mainwindow.cpp
     boardviewer.cpp
     resources.qrc
 )
