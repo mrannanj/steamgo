@@ -1,12 +1,14 @@
 #include "boardviewer.h"
+#include "gamestate.h"
 #include <QPainter>
 #include <QPaintEvent>
 
-BoardViewer::BoardViewer(QWidget *parent):
+BoardViewer::BoardViewer(QWidget *parent, GameState& gameState):
     QWidget(parent),
     mBoardImage(":/images/board.png"),
     mBlackImage(":/images/black.png"),
-    mWhiteImage(":/images/white.png")
+    mWhiteImage(":/images/white.png"),
+    mGameState(gameState)
 {
     setWindowTitle("Go Board");
     resize(608, 608);
@@ -26,8 +28,8 @@ void BoardViewer::paintEvent(QPaintEvent *event) {
         return;
     }
 
-    int rows = 19;
-    int cols = 19;
+    int rows = kBoardSize;
+    int cols = kBoardSize;
     QSize boardSize = mBoardImage.size().scaled(size(), Qt::KeepAspectRatio);
 
     int bgX = (this->width() - boardSize.width()) / 2;
@@ -39,13 +41,23 @@ void BoardViewer::paintEvent(QPaintEvent *event) {
     int cellHeight = boardSize.height() / rows;
 
     QPixmap scaledBlack = mBlackImage.scaled(cellWidth, cellHeight, Qt::KeepAspectRatio);
+    QPixmap scaledWhite = mWhiteImage.scaled(cellWidth, cellHeight, Qt::KeepAspectRatio);
 
     for (int row = 0; row < rows; ++row) {
         for (int col = 0; col < cols; ++col) {
             int x = bgX + col * cellWidth + (cellWidth - scaledBlack.width()) / 2;
             int y = bgY + row * cellHeight + (cellHeight - scaledBlack.height()) / 2;
 
-            painter.drawPixmap(x, y, scaledBlack);
+            switch (mGameState.board[row][col]) {
+            case Stone::BLACK:
+                painter.drawPixmap(x, y, scaledBlack);
+                break;
+            case Stone::WHITE:
+                painter.drawPixmap(x, y, scaledWhite);
+                break;
+            case Stone::NONE:
+                break;
+            }
         }
     }
 }
