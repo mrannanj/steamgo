@@ -15,6 +15,7 @@ protected:
 
 private:
     QPixmap black;
+    QPixmap white;
     QPixmap board;
 };
 
