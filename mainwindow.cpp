@@ -12,5 +12,4 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 
     setLayout(layout);
     setWindowTitle("TrollGo");
-    resize(800, 600);
 }
