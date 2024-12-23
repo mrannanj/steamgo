@@ -15,9 +15,13 @@ public slots:
     void placeRandomStone();
 
 protected:
+    void mouseMoveEvent(QMouseEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
+    int mMouseOverRow;
+    int mMouseOverCol;
     QPixmap mBoardImage;
     QPixmap mBlackImage;
     QPixmap mWhiteImage;
