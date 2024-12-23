@@ -12,6 +12,7 @@ enum Stone {
 };
 
 struct GameState {
+    enum Stone lastStone = NONE;
     std::array<std::array<Stone, kBoardSize>, kBoardSize> board = {NONE};
 };
 

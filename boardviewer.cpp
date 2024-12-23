@@ -45,6 +45,21 @@ void BoardViewer::mouseMoveEvent(QMouseEvent *event) {
     update();
 }
 
+void BoardViewer::mouseReleaseEvent(QMouseEvent *event) {
+    if (mMouseOverRow < 0)
+        return;
+    if (mGameState.board[mMouseOverRow][mMouseOverCol] != Stone:: NONE)
+        return;
+
+    enum Stone curStone = Stone::BLACK;
+    if (mGameState.lastStone == Stone::BLACK)
+        curStone = Stone::WHITE;
+    mGameState.board[mMouseOverRow][mMouseOverCol] = curStone;
+    mGameState.lastStone = curStone;
+
+    update();
+}
+
 void BoardViewer::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
 
