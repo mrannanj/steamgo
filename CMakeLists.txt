@@ -14,6 +14,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 qt_add_executable(trollgo
+    gamestate.cpp
     main.cpp
     mainwindow.cpp
     boardviewer.cpp

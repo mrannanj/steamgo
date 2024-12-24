@@ -1,6 +1,8 @@
 #include "boardviewer.h"
 #include "gamestate.h"
 #include <cstdlib>
+#include <tuple>
+#include <QDebug>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QMouseEvent>
@@ -56,6 +58,16 @@ void BoardViewer::mouseReleaseEvent(QMouseEvent *event) {
         curStone = Stone::WHITE;
     mGameState.board[mMouseOverRow][mMouseOverCol] = curStone;
     mGameState.lastStone = curStone;
+
+    std::tuple<int,int> adjacents[] = {
+        {mMouseOverRow+1, mMouseOverCol}, {mMouseOverRow-1, mMouseOverCol},
+        {mMouseOverRow, mMouseOverCol+1}, {mMouseOverRow, mMouseOverCol-1},
+    };
+    qDebug() << "Finding adjacent of" << mMouseOverRow << "," << mMouseOverCol;
+    for (auto [adj_row, adj_col] : adjacents) {
+        int liberties = mGameState.countLiberties(adj_row, adj_col);
+        qDebug() << adj_row << "," << adj_col << "liberties:" << liberties;
+    }
 
     update();
 }
