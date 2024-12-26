@@ -117,10 +117,12 @@ void BoardViewer::paintEvent(QPaintEvent *event) {
         }
     }
 
+    QPixmap curStone = (mGameState.lastStone == Stone::BLACK) ? scaledWhite : scaledBlack;
     if (mMouseOverRow >= 0 && mMouseOverCol >= 0) {
         int x = bgX + mMouseOverCol * cellWidth + (cellWidth - scaledBlack.width()) / 2;
         int y = bgY + mMouseOverRow * cellHeight + (cellHeight - scaledBlack.height()) / 2;
-        painter.drawPixmap(x, y, scaledBlack);
+        painter.setOpacity(0.5);
+        painter.drawPixmap(x, y, curStone);
     }
 }
 
