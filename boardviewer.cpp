@@ -50,6 +50,8 @@ void BoardViewer::mouseMoveEvent(QMouseEvent *event) {
 void BoardViewer::mouseReleaseEvent(QMouseEvent *event) {
     if (mMouseOverRow < 0)
         return;
+
+    // Only empty spots can be played in.
     if (mGameState.board[mMouseOverRow][mMouseOverCol] != Stone:: NONE)
         return;
 
@@ -57,17 +59,28 @@ void BoardViewer::mouseReleaseEvent(QMouseEvent *event) {
     if (mGameState.lastStone == Stone::BLACK)
         curStone = Stone::WHITE;
     mGameState.board[mMouseOverRow][mMouseOverCol] = curStone;
-    mGameState.lastStone = curStone;
 
+    // Check if this stone would capture something.
     std::tuple<int,int> adjacents[] = {
         {mMouseOverRow+1, mMouseOverCol}, {mMouseOverRow-1, mMouseOverCol},
         {mMouseOverRow, mMouseOverCol+1}, {mMouseOverRow, mMouseOverCol-1},
     };
-    qDebug() << "Finding adjacent of" << mMouseOverRow << "," << mMouseOverCol;
+    bool willCapture = false;
     for (auto [adj_row, adj_col] : adjacents) {
-        int liberties = mGameState.countLiberties(adj_row, adj_col);
-        qDebug() << adj_row << "," << adj_col << "liberties:" << liberties;
+        willCapture |= mGameState.captureMaybe(adj_row, adj_col, false) < 0;
     }
+
+    // No capture, so check that we have at least one liberty.
+    if (!willCapture && mGameState.captureMaybe(mMouseOverRow, mMouseOverCol, false) < 0) {
+        mGameState.board[mMouseOverRow][mMouseOverCol] = Stone:: NONE;
+        return;
+    }
+
+    // Capture adjacent 0 liberty groups.
+    for (auto [adj_row, adj_col] : adjacents) {
+        mGameState.captureMaybe(adj_row, adj_col, true);
+    }
+    mGameState.lastStone = curStone;
 
     update();
 }

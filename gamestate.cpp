@@ -9,13 +9,12 @@ bool GameState::coordWithinBoard(int row, int col) {
     return row >= 0 && row < kBoardSize && col >= 0 && col < kBoardSize;
 }
 
-int GameState::countLiberties(int origRow, int origCol) {
+int GameState::captureMaybe(int origRow, int origCol, bool capture) {
     if (!coordWithinBoard(origRow, origCol))
         return 0;
     enum Stone groupColor = board[origRow][origCol];
     if (groupColor == Stone::NONE)
-        return -1;
-    qDebug() << "Finding liberties for" << origRow << "," << origCol << ", color:" << groupColor;
+        return 0;
 
     int ret = 0;
     bool visited[kBoardSize][kBoardSize] = {false};
@@ -26,8 +25,7 @@ int GameState::countLiberties(int origRow, int origCol) {
         group.pop();
         visited[row][col] = true;
         tuple<int,int> adjacents[] = {
-            {row+1, col}, {row-1, col},
-            {row, col+1}, {row, col-1},
+            {row+1, col}, {row-1, col}, {row, col+1}, {row, col-1},
         };
         for (auto [adjRow, adjCol] : adjacents) {
             // No liberties outside the board
@@ -44,5 +42,31 @@ int GameState::countLiberties(int origRow, int origCol) {
             }
         }
     }
+
+    // Capture on the next call when the capture parameter is true.
+    if (!capture)
+        return (ret == 0) ? -1 : 0;
+    // Group has liberties, not capturing.
+    if (capture && ret > 0) {
+        return 0;
+    }
+    group.push({origRow, origCol});
+    while (group.size() > 0) {
+        auto [row, col] = group.top();
+        group.pop();
+        board[row][col] = Stone::NONE;
+
+        tuple<int,int> adjacents[] = {
+            {row+1, col}, {row-1, col}, {row, col+1}, {row, col-1},
+        };
+        for (auto [adjRow, adjCol] : adjacents) {
+            if (!coordWithinBoard(adjRow, adjCol))
+                continue;
+            if (board[adjRow][adjCol] == groupColor) {
+                group.push({adjRow, adjCol});
+            }
+        }
+    }
+
     return ret;
 }

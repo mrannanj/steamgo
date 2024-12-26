@@ -16,7 +16,7 @@ struct GameState {
     std::array<std::array<Stone, kBoardSize>, kBoardSize> board = {NONE};
 
     bool coordWithinBoard(int row, int col);
-    int countLiberties(int row, int col);
+    int captureMaybe(int row, int col, bool capture);
 };
 
 #endif // GAMESTATE_H
