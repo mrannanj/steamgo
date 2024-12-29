@@ -18,6 +18,7 @@ qt_add_executable(trollgo
     src/main.cpp
     src/mainwindow.cpp
     src/boardviewer.cpp
+    src/sgf.cpp
     resources.qrc
 )
 

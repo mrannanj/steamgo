@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
+MainWindow::MainWindow(GameState &gameState, QWidget *parent):
+    QWidget(parent),
+    mGameState(gameState)
+{
     mBoardViewer = new BoardViewer(this, mGameState);
     mPreviousButton = new QPushButton("Previous", this);
     mNextButton = new QPushButton("Next", this);

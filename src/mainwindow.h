@@ -11,7 +11,7 @@ class MainWindow : public QWidget {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(GameState &gameState, QWidget *parent = nullptr);
 
 private:
     BoardViewer *mBoardViewer;

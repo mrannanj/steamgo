@@ -10,16 +10,30 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
     if (addToRecord && moveIdx != (int)this->moves.size())
         return;
 
-    if (row < 0)
+    enum Stone curStone = Stone::BLACK;
+    if (this->lastStone == Stone::BLACK)
+        curStone = Stone::WHITE;
+
+    // Ugly special case for pass.
+    if (row < 0 && col < 0) {
+        this->lastStone = curStone;
+        if (!addToRecord)
+            return;
+        Move move {
+            .row = -1,
+            .col = -1,
+            .stone = curStone,
+        };
+        this->moves.push_back(move);
+        this->moveIdx += 1;
         return;
+    }
 
     // Only empty spots can be played in.
     if (this->board[row][col] != Stone:: NONE)
         return;
 
-    enum Stone curStone = Stone::BLACK;
-    if (this->lastStone == Stone::BLACK)
-        curStone = Stone::WHITE;
+    // Place the stone on board temporarily.
     this->board[row][col] = curStone;
 
     // Check if this stone would capture something.
