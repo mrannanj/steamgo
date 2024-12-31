@@ -12,7 +12,8 @@ public:
     BoardViewer(QWidget *parent, GameState& gameState);
 
 public slots:
-    void next();
+    void next(void);
+    void previous(void);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;

@@ -22,10 +22,15 @@ struct GameState {
     enum Stone lastStone = NONE;
     std::array<std::array<Stone, kBoardSize>, kBoardSize> board = {NONE};
     std::vector<Move> moves;
+    int moveIdx = 0;
 
-    void attemptMove(int row, int col);
+    void attemptMove(int row, int col, bool addToRecord);
+    void boardAtMove(int idx);
     bool coordWithinBoard(int row, int col);
     int captureMaybe(int row, int col, bool capture);
+    void clearBoard(void);
+    void next(void);
+    void previous(void);
 };
 
 #endif // GAMESTATE_H

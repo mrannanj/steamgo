@@ -15,7 +15,8 @@ public:
 
 private:
     BoardViewer *mBoardViewer;
-    QPushButton *mControlButton;
+    QPushButton *mNextButton;
+    QPushButton *mPreviousButton;
     GameState mGameState;
 };
 
