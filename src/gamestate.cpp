@@ -5,6 +5,49 @@
 
 using std::stack, std::tuple;
 
+void GameState::attemptMove(int row, int col) {
+    if (row < 0)
+        return;
+
+    // Only empty spots can be played in.
+    if (this->board[row][col] != Stone:: NONE)
+        return;
+
+    enum Stone curStone = Stone::BLACK;
+    if (this->lastStone == Stone::BLACK)
+        curStone = Stone::WHITE;
+    this->board[row][col] = curStone;
+
+    // Check if this stone would capture something.
+    std::tuple<int,int> adjacents[] = {
+        {row+1, col}, {row-1, col},
+        {row, col+1}, {row, col-1},
+    };
+    bool willCapture = false;
+    for (auto [adj_row, adj_col] : adjacents) {
+        willCapture |= captureMaybe(adj_row, adj_col, false) < 0;
+    }
+
+    // No capture, so check that we have at least one liberty.
+    if (!willCapture && captureMaybe(row, col, false) < 0) {
+        this->board[row][col] = Stone:: NONE;
+        return;
+    }
+
+    // Capture adjacent 0 liberty groups.
+    for (auto [adj_row, adj_col] : adjacents) {
+        this->captureMaybe(adj_row, adj_col, true);
+    }
+    this->lastStone = curStone;
+
+    Move move {
+        .row = row,
+        .col = col,
+        .stone = curStone,
+    };
+    this->moves.push_back(move);
+}
+
 bool GameState::coordWithinBoard(int row, int col) {
     return row >= 0 && row < kBoardSize && col >= 0 && col < kBoardSize;
 }
