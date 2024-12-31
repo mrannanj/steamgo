@@ -42,47 +42,7 @@ void BoardViewer::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void BoardViewer::mouseReleaseEvent(QMouseEvent *event) {
-    if (mMouseRow < 0)
-        return;
-
-    // Only empty spots can be played in.
-    if (mGameState.board[mMouseRow][mMouseCol] != Stone:: NONE)
-        return;
-
-    enum Stone curStone = Stone::BLACK;
-    if (mGameState.lastStone == Stone::BLACK)
-        curStone = Stone::WHITE;
-    mGameState.board[mMouseRow][mMouseCol] = curStone;
-
-    // Check if this stone would capture something.
-    std::tuple<int,int> adjacents[] = {
-        {mMouseRow+1, mMouseCol}, {mMouseRow-1, mMouseCol},
-        {mMouseRow, mMouseCol+1}, {mMouseRow, mMouseCol-1},
-    };
-    bool willCapture = false;
-    for (auto [adj_row, adj_col] : adjacents) {
-        willCapture |= mGameState.captureMaybe(adj_row, adj_col, false) < 0;
-    }
-
-    // No capture, so check that we have at least one liberty.
-    if (!willCapture && mGameState.captureMaybe(mMouseRow, mMouseCol, false) < 0) {
-        mGameState.board[mMouseRow][mMouseCol] = Stone:: NONE;
-        return;
-    }
-
-    // Capture adjacent 0 liberty groups.
-    for (auto [adj_row, adj_col] : adjacents) {
-        mGameState.captureMaybe(adj_row, adj_col, true);
-    }
-    mGameState.lastStone = curStone;
-
-    Move move {
-        .row = mMouseRow,
-        .col = mMouseCol,
-        .stone = curStone,
-    };
-    mGameState.moves.push_back(move);
-
+    mGameState.attemptMove(mMouseRow, mMouseCol);
     update();
 }
 
