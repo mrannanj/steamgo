@@ -5,7 +5,11 @@
 
 using std::stack, std::tuple;
 
-void GameState::attemptMove(int row, int col) {
+void GameState::attemptMove(int row, int col, bool addToRecord) {
+    // Only add the stone if we are looking at the latest board situation.
+    if (addToRecord && moveIdx != (int)this->moves.size())
+        return;
+
     if (row < 0)
         return;
 
@@ -40,12 +44,26 @@ void GameState::attemptMove(int row, int col) {
     }
     this->lastStone = curStone;
 
+    if (!addToRecord)
+        return;
     Move move {
         .row = row,
         .col = col,
         .stone = curStone,
     };
     this->moves.push_back(move);
+    this->moveIdx += 1;
+}
+
+void GameState::boardAtMove(int idx) {
+    if (idx < 0 || idx > (int)moves.size())
+        return;
+    clearBoard();
+    moveIdx = idx;
+    for (size_t i = 0; i < (size_t)idx; ++i) {
+        const Move& move = this->moves.at(i);
+        attemptMove(move.row, move.col, false);
+    }
 }
 
 bool GameState::coordWithinBoard(int row, int col) {
@@ -112,4 +130,21 @@ int GameState::captureMaybe(int origRow, int origCol, bool capture) {
     }
 
     return ret;
+}
+
+void GameState::clearBoard(void) {
+    this->lastStone = NONE;
+    for (auto& rowArray : this->board)
+        rowArray.fill(Stone::NONE);
+    this->moveIdx = 0;
+}
+
+void GameState::next(void) {
+    if (moveIdx < this->moves.size())
+        boardAtMove(moveIdx + 1);
+}
+
+void GameState::previous(void) {
+    if (moveIdx > 0)
+        boardAtMove(moveIdx - 1);
 }

@@ -21,6 +21,13 @@ BoardViewer::BoardViewer(QWidget *parent, GameState& gameState):
 }
 
 void BoardViewer::next() {
+    mGameState.next();
+    update();
+}
+
+void BoardViewer::previous() {
+    mGameState.previous();
+    update();
 }
 
 void BoardViewer::mouseMoveEvent(QMouseEvent *event) {
@@ -42,7 +49,7 @@ void BoardViewer::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void BoardViewer::mouseReleaseEvent(QMouseEvent *event) {
-    mGameState.attemptMove(mMouseRow, mMouseCol);
+    mGameState.attemptMove(mMouseRow, mMouseCol, true);
     update();
 }
 
