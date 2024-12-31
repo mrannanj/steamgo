@@ -12,7 +12,7 @@ public:
     BoardViewer(QWidget *parent, GameState& gameState);
 
 public slots:
-    void placeRandomStone();
+    void next();
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
