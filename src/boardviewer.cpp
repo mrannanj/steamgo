@@ -1,6 +1,5 @@
 #include "boardviewer.h"
 #include "gamestate.h"
-#include <cstdlib>
 #include <tuple>
 #include <QDebug>
 #include <QPainter>
@@ -21,12 +20,7 @@ BoardViewer::BoardViewer(QWidget *parent, GameState& gameState):
     setMinimumSize(608, 608);
 }
 
-void BoardViewer::placeRandomStone() {
-    unsigned row = rand() % (kBoardSize + 1);
-    unsigned col = rand() % (kBoardSize + 1);
-    unsigned stone = 1 + (rand() % 2);
-    mGameState.board[row][col] = static_cast<Stone>(stone);
-    update();
+void BoardViewer::next() {
 }
 
 void BoardViewer::mouseMoveEvent(QMouseEvent *event) {
