@@ -76,6 +76,13 @@ void BoardViewer::mouseReleaseEvent(QMouseEvent *event) {
     }
     mGameState.lastStone = curStone;
 
+    Move move {
+        .row = mMouseRow,
+        .col = mMouseCol,
+        .stone = curStone,
+    };
+    mGameState.moves.push_back(move);
+
     update();
 }
 
