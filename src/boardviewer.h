@@ -21,8 +21,8 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 private:
-    int mMouseOverRow;
-    int mMouseOverCol;
+    int mMouseRow;
+    int mMouseCol;
     QPixmap mBoardImage;
     QPixmap mBlackImage;
     QPixmap mWhiteImage;

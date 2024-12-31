@@ -9,8 +9,8 @@
 
 BoardViewer::BoardViewer(QWidget *parent, GameState& gameState):
     QWidget(parent),
-    mMouseOverRow(-1),
-    mMouseOverCol(-1),
+    mMouseRow(-1),
+    mMouseCol(-1),
     mBoardImage(":/images/board.png"),
     mBlackImage(":/images/black.png"),
     mWhiteImage(":/images/white.png"),
@@ -32,32 +32,32 @@ void BoardViewer::mouseMoveEvent(QMouseEvent *event) {
     int row = mousePos.y() / cellHeight;
 
     if (col >= 0 && col < kBoardSize && row >= 0 && row < kBoardSize) {
-        mMouseOverRow = row;
-        mMouseOverCol = col;
+        mMouseRow = row;
+        mMouseCol = col;
     } else {
-        mMouseOverRow = -1;
-        mMouseOverCol = -1;
+        mMouseRow = -1;
+        mMouseCol = -1;
     }
     update();
 }
 
 void BoardViewer::mouseReleaseEvent(QMouseEvent *event) {
-    if (mMouseOverRow < 0)
+    if (mMouseRow < 0)
         return;
 
     // Only empty spots can be played in.
-    if (mGameState.board[mMouseOverRow][mMouseOverCol] != Stone:: NONE)
+    if (mGameState.board[mMouseRow][mMouseCol] != Stone:: NONE)
         return;
 
     enum Stone curStone = Stone::BLACK;
     if (mGameState.lastStone == Stone::BLACK)
         curStone = Stone::WHITE;
-    mGameState.board[mMouseOverRow][mMouseOverCol] = curStone;
+    mGameState.board[mMouseRow][mMouseCol] = curStone;
 
     // Check if this stone would capture something.
     std::tuple<int,int> adjacents[] = {
-        {mMouseOverRow+1, mMouseOverCol}, {mMouseOverRow-1, mMouseOverCol},
-        {mMouseOverRow, mMouseOverCol+1}, {mMouseOverRow, mMouseOverCol-1},
+        {mMouseRow+1, mMouseCol}, {mMouseRow-1, mMouseCol},
+        {mMouseRow, mMouseCol+1}, {mMouseRow, mMouseCol-1},
     };
     bool willCapture = false;
     for (auto [adj_row, adj_col] : adjacents) {
@@ -65,8 +65,8 @@ void BoardViewer::mouseReleaseEvent(QMouseEvent *event) {
     }
 
     // No capture, so check that we have at least one liberty.
-    if (!willCapture && mGameState.captureMaybe(mMouseOverRow, mMouseOverCol, false) < 0) {
-        mGameState.board[mMouseOverRow][mMouseOverCol] = Stone:: NONE;
+    if (!willCapture && mGameState.captureMaybe(mMouseRow, mMouseCol, false) < 0) {
+        mGameState.board[mMouseRow][mMouseCol] = Stone:: NONE;
         return;
     }
 
@@ -125,9 +125,9 @@ void BoardViewer::paintEvent(QPaintEvent *event) {
     }
 
     QPixmap curStone = (mGameState.lastStone == Stone::BLACK) ? scaledWhite : scaledBlack;
-    if (mMouseOverRow >= 0 && mMouseOverCol >= 0) {
-        int x = bgX + mMouseOverCol * cellWidth + (cellWidth - scaledBlack.width()) / 2;
-        int y = bgY + mMouseOverRow * cellHeight + (cellHeight - scaledBlack.height()) / 2;
+    if (mMouseRow >= 0 && mMouseCol >= 0) {
+        int x = bgX + mMouseCol * cellWidth + (cellWidth - scaledBlack.width()) / 2;
+        int y = bgY + mMouseRow * cellHeight + (cellHeight - scaledBlack.height()) / 2;
         painter.setOpacity(0.5);
         painter.drawPixmap(x, y, curStone);
     }
