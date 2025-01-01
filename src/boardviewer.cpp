@@ -7,7 +7,7 @@
 #include <QMouseEvent>
 #include <QResizeEvent>
 
-BoardViewer::BoardViewer(QWidget *parent, GameState& gameState):
+BoardViewer::BoardViewer(QWidget *parent, GameState &gameState):
     QWidget(parent),
     mMouseRow(-1),
     mMouseCol(-1),

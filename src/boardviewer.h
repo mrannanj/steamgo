@@ -9,7 +9,7 @@ class BoardViewer : public QWidget {
     Q_OBJECT
 
 public:
-    BoardViewer(QWidget *parent, GameState& gameState);
+    BoardViewer(QWidget *parent, GameState &gameState);
 
 public slots:
     void next(void);
@@ -27,7 +27,7 @@ private:
     QPixmap mBoardImage;
     QPixmap mBlackImage;
     QPixmap mWhiteImage;
-    GameState& mGameState;
+    GameState &mGameState;
 };
 
 #endif // BOARDVIEWER_H
