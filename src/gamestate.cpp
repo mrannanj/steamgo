@@ -75,7 +75,7 @@ void GameState::boardAtMove(int idx) {
     clearBoard();
     moveIdx = idx;
     for (size_t i = 0; i < (size_t)idx; ++i) {
-        const Move& move = this->moves.at(i);
+        const Move &move = this->moves.at(i);
         attemptMove(move.row, move.col, false);
     }
 }
@@ -148,7 +148,7 @@ int GameState::captureMaybe(int origRow, int origCol, bool capture) {
 
 void GameState::clearBoard(void) {
     this->lastStone = NONE;
-    for (auto& rowArray : this->board)
+    for (auto &rowArray : this->board)
         rowArray.fill(Stone::NONE);
     this->moveIdx = 0;
 }
