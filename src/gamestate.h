@@ -3,6 +3,7 @@
 
 #include <array>
 #include <vector>
+#include <iostream>
 
 constexpr unsigned kBoardSize = 19;
 
@@ -32,5 +33,7 @@ struct GameState {
     void next(void);
     void previous(void);
 };
+
+std::ostream &operator<<(std::ostream &os, const GameState &gs);
 
 #endif // GAMESTATE_H

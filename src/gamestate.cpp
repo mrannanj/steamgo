@@ -1,9 +1,8 @@
 #include "gamestate.h"
 #include <stack>
 #include <tuple>
-#include <QDebug>
 
-using std::stack, std::tuple;
+using std::stack, std::tuple, std::ostream;
 
 void GameState::attemptMove(int row, int col, bool addToRecord) {
     // Only add the stone if we are looking at the latest board situation.
@@ -161,4 +160,25 @@ void GameState::next(void) {
 void GameState::previous(void) {
     if (moveIdx > 0)
         boardAtMove(moveIdx - 1);
+}
+
+ostream &operator<<(ostream &os, const GameState &gs) {
+    for (size_t j = 0; j < gs.board.size(); ++j) {
+        for (size_t i = 0; i < gs.board[j].size(); ++i) {
+            enum Stone stone = gs.board[j][i];
+            switch (stone) {
+            case Stone::NONE:
+                os << ".";
+                break;
+            case Stone::BLACK:
+                os << "#";
+                break;
+            case Stone::WHITE:
+                os << "o";
+                break;
+            }
+        }
+        os << "\n";
+    }
+    return os;
 }
