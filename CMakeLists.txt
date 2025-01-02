@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(trollgo VERSION 1.0.0 LANGUAGES CXX)
+project(steamgo VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,7 +21,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-qt_add_executable(trollgo
+qt_add_executable(steamgo
     src/gamestate.cpp
     src/main.cpp
     src/mainwindow.cpp
@@ -30,7 +30,7 @@ qt_add_executable(trollgo
     resources.qrc
 )
 
-target_link_libraries(trollgo PRIVATE Qt6::Widgets)
+target_link_libraries(steamgo PRIVATE Qt6::Widgets)
 
 enable_testing()
 add_executable(sgf_tests
