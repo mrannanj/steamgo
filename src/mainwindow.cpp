@@ -17,5 +17,5 @@ MainWindow::MainWindow(GameState &gameState, QWidget *parent):
     layout->addWidget(mNextButton);
 
     setLayout(layout);
-    setWindowTitle("TrollGo");
+    setWindowTitle("SteamGo");
 }
