@@ -23,3 +23,8 @@ jobs:
       run: |
         cmake -S . -B build
         cmake --build build -j $(getconf _NPROCESSORS_ONLN)
+
+    - name: Run tests
+      run: |
+        cd build
+        ctest --output-on-failure
