@@ -4,7 +4,7 @@
 
 using namespace std;
 
-bool readSGF(const char *filename, GameState &gs) {
+bool readSGF(const string &filename, GameState &gs) {
     ifstream f(filename);
     if (!f.good()) {
         f.close();
