@@ -1,3 +1,4 @@
+#include "adjacentgen.h"
 #include "gamestate.h"
 #include <stack>
 #include <tuple>
@@ -36,9 +37,8 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
     this->board[row][col] = curStone;
 
     // Check if this stone would capture something.
-    vector<tuple<int,int>> adjacents = getAdjacents(row, col);
     bool willCapture = false;
-    for (auto [adj_row, adj_col] : adjacents) {
+    for (auto [adj_row, adj_col] : AdjacentGen(row, col)) {
         if (this->board[adj_row][adj_col] != curStone)
             willCapture |= captureMaybe(adj_row, adj_col, false) < 0;
     }
@@ -50,7 +50,7 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
     }
 
     // Capture adjacent 0 liberty groups.
-    for (auto [adj_row, adj_col] : adjacents) {
+    for (auto [adj_row, adj_col] : AdjacentGen(row, col)) {
         if (this->board[adj_row][adj_col] != curStone)
             this->captureMaybe(adj_row, adj_col, true);
     }
@@ -78,26 +78,7 @@ void GameState::boardAtMove(int idx) {
     }
 }
 
-bool GameState::coordWithinBoard(int row, int col) {
-    return row >= 0 && row < kBoardSize && col >= 0 && col < kBoardSize;
-}
-
-vector<tuple<int,int>> GameState::getAdjacents(int row, int col) {
-    std::tuple<int,int> adjacents[] = {
-        {row+1, col}, {row-1, col},
-        {row, col+1}, {row, col-1},
-    };
-    vector<tuple<int,int>> ret;
-    for (auto [adj_row, adj_col] : adjacents) {
-        if (coordWithinBoard(adj_row, adj_col))
-            ret.push_back({adj_row, adj_col});
-    }
-    return ret;
-}
-
 int GameState::captureMaybe(int origRow, int origCol, bool capture) {
-    if (!coordWithinBoard(origRow, origCol))
-        return 0;
     enum Stone groupColor = board[origRow][origCol];
     if (groupColor == Stone::NONE)
         return 0;
@@ -110,8 +91,7 @@ int GameState::captureMaybe(int origRow, int origCol, bool capture) {
         auto [row, col] = group.top();
         group.pop();
         visited[row][col] = true;
-        vector<tuple<int,int>> adjacents = getAdjacents(row, col);
-        for (auto [adjRow, adjCol] : adjacents) {
+        for (auto [adjRow, adjCol] : AdjacentGen(row, col)) {
             // No liberties outside the board
             if (visited[adjRow][adjCol])
                 continue;
@@ -138,8 +118,7 @@ int GameState::captureMaybe(int origRow, int origCol, bool capture) {
         group.pop();
         board[row][col] = Stone::NONE;
 
-        vector<tuple<int,int>> adjacents = getAdjacents(row, col);
-        for (auto [adjRow, adjCol] : adjacents) {
+        for (auto [adjRow, adjCol] : AdjacentGen(row, col)) {
             if (board[adjRow][adjCol] == groupColor) {
                 group.push({adjRow, adjCol});
             }
