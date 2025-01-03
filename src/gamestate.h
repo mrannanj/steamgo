@@ -2,6 +2,7 @@
 #define GAMESTATE_H
 
 #include <array>
+#include <tuple>
 #include <vector>
 #include <iostream>
 
@@ -28,6 +29,7 @@ struct GameState {
     void attemptMove(int row, int col, bool addToRecord);
     void boardAtMove(int idx);
     bool coordWithinBoard(int row, int col);
+    std::vector<std::tuple<int,int>> getAdjacents(int row, int col);
     int captureMaybe(int row, int col, bool capture);
     void clearBoard(void);
     void next(void);

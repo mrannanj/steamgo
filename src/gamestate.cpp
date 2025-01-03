@@ -2,7 +2,7 @@
 #include <stack>
 #include <tuple>
 
-using std::stack, std::tuple, std::ostream;
+using std::stack, std::tuple, std::ostream, std::vector;
 
 void GameState::attemptMove(int row, int col, bool addToRecord) {
     // Only add the stone if we are looking at the latest board situation.
@@ -36,10 +36,7 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
     this->board[row][col] = curStone;
 
     // Check if this stone would capture something.
-    std::tuple<int,int> adjacents[] = {
-        {row+1, col}, {row-1, col},
-        {row, col+1}, {row, col-1},
-    };
+    vector<tuple<int,int>> adjacents = getAdjacents(row, col);
     bool willCapture = false;
     for (auto [adj_row, adj_col] : adjacents) {
         willCapture |= captureMaybe(adj_row, adj_col, false) < 0;
@@ -83,6 +80,19 @@ bool GameState::coordWithinBoard(int row, int col) {
     return row >= 0 && row < kBoardSize && col >= 0 && col < kBoardSize;
 }
 
+vector<tuple<int,int>> GameState::getAdjacents(int row, int col) {
+    std::tuple<int,int> adjacents[] = {
+        {row+1, col}, {row-1, col},
+        {row, col+1}, {row, col-1},
+    };
+    vector<tuple<int,int>> ret;
+    for (auto [adj_row, adj_col] : adjacents) {
+        if (coordWithinBoard(adj_row, adj_col))
+            ret.push_back({adj_row, adj_col});
+    }
+    return ret;
+}
+
 int GameState::captureMaybe(int origRow, int origCol, bool capture) {
     if (!coordWithinBoard(origRow, origCol))
         return 0;
@@ -98,13 +108,9 @@ int GameState::captureMaybe(int origRow, int origCol, bool capture) {
         auto [row, col] = group.top();
         group.pop();
         visited[row][col] = true;
-        tuple<int,int> adjacents[] = {
-            {row+1, col}, {row-1, col}, {row, col+1}, {row, col-1},
-        };
+        vector<tuple<int,int>> adjacents = getAdjacents(row, col);
         for (auto [adjRow, adjCol] : adjacents) {
             // No liberties outside the board
-            if (!coordWithinBoard(adjRow, adjCol))
-                continue;
             if (visited[adjRow][adjCol])
                 continue;
             enum Stone coordStone = board[adjRow][adjCol];
@@ -130,12 +136,8 @@ int GameState::captureMaybe(int origRow, int origCol, bool capture) {
         group.pop();
         board[row][col] = Stone::NONE;
 
-        tuple<int,int> adjacents[] = {
-            {row+1, col}, {row-1, col}, {row, col+1}, {row, col-1},
-        };
+        vector<tuple<int,int>> adjacents = getAdjacents(row, col);
         for (auto [adjRow, adjCol] : adjacents) {
-            if (!coordWithinBoard(adjRow, adjCol))
-                continue;
             if (board[adjRow][adjCol] == groupColor) {
                 group.push({adjRow, adjCol});
             }
