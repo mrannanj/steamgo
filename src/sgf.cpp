@@ -41,3 +41,38 @@ bool readSGF(const string &filename, GameState &gs) {
     }
     return true;
 }
+
+bool writeSGF(const std::string &filename, const GameState &gs) {
+    ofstream f(filename);
+    if (!f.good()) {
+        f.close();
+        return false;
+    }
+    stringstream ss;
+    ss <<
+        "(;FF[4]\n"
+        "CA[UTF-8]\n"
+        "GM[1]\n"
+        "GN[demo]\n"
+        "PC[Online]\n"
+        "PB[Black]\n"
+        "PW[White]\n"
+        "BR[10k]\n"
+        "WR[10k]\n"
+        "OT[Error: time control missing]\n"
+        "RE[?]\n"
+        "SZ[19]\n"
+        "KM[6.5]\n"
+        "RU[Japanese]\n\n";
+    for (const Move &move : gs.moves) {
+        ss << (move.stone == Stone::BLACK ? ";B[" : ";W[");
+        if (move.row >= 0 && move.col >= 0)
+            ss << (char)(move.col + 'a') << (char)(move.row + 'a');
+        ss << "]\n";
+    }
+    ss << ")\n";
+    f << ss.rdbuf();
+    f.close();
+
+    return true;
+}
