@@ -4,20 +4,21 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
-#include "gamestate.h"
+#include "appstate.h"
 #include "boardviewer.h"
 
 class MainWindow : public QWidget {
     Q_OBJECT
 
 public:
-    MainWindow(GameState &gameState, QWidget *parent = nullptr);
+    MainWindow(AppState &appState, QWidget *parent = nullptr);
 
 private:
+    AppState& mAppState;
     BoardViewer *mBoardViewer;
     QPushButton *mNextButton;
     QPushButton *mPreviousButton;
-    GameState mGameState;
+    QPushButton *mSaveButton;
 };
 
 #endif // MAINWINDOW_H
