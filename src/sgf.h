@@ -1,8 +1,9 @@
 #ifndef SGF_H
 #define SGF_H
 
+#include <string>
 #include "gamestate.h"
 
-bool readSGF(const char *filename, GameState &gs);
+bool readSGF(const std::string &filename, GameState &gs);
 
-#endif
+#endif // SGF_H
