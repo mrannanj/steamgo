@@ -39,7 +39,8 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
     vector<tuple<int,int>> adjacents = getAdjacents(row, col);
     bool willCapture = false;
     for (auto [adj_row, adj_col] : adjacents) {
-        willCapture |= captureMaybe(adj_row, adj_col, false) < 0;
+        if (this->board[adj_row][adj_col] != curStone)
+            willCapture |= captureMaybe(adj_row, adj_col, false) < 0;
     }
 
     // No capture, so check that we have at least one liberty.
@@ -50,7 +51,8 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
 
     // Capture adjacent 0 liberty groups.
     for (auto [adj_row, adj_col] : adjacents) {
-        this->captureMaybe(adj_row, adj_col, true);
+        if (this->board[adj_row][adj_col] != curStone)
+            this->captureMaybe(adj_row, adj_col, true);
     }
     this->lastStone = curStone;
 
