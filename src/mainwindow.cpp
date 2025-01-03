@@ -1,10 +1,14 @@
 #include "mainwindow.h"
 
-MainWindow::MainWindow(GameState &gameState, QWidget *parent):
+MainWindow::MainWindow(AppState &appState, QWidget *parent):
     QWidget(parent),
-    mGameState(gameState)
+    mAppState(appState),
+    mBoardViewer(nullptr),
+    mPreviousButton(nullptr),
+    mNextButton(nullptr),
+    mSaveButton(nullptr)
 {
-    mBoardViewer = new BoardViewer(this, mGameState);
+    mBoardViewer = new BoardViewer(this, mAppState);
     mPreviousButton = new QPushButton("Previous", this);
     mNextButton = new QPushButton("Next", this);
 
@@ -15,6 +19,12 @@ MainWindow::MainWindow(GameState &gameState, QWidget *parent):
     layout->addWidget(mBoardViewer);
     layout->addWidget(mPreviousButton);
     layout->addWidget(mNextButton);
+
+    if (appState.writeSGF) {
+        mSaveButton = new QPushButton("Save", this);
+        connect(mSaveButton, &QPushButton::clicked, mBoardViewer, &BoardViewer::save);
+        layout->addWidget(mSaveButton);
+    }
 
     setLayout(layout);
     setWindowTitle("SteamGo");

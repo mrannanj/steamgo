@@ -1,5 +1,6 @@
 #include "boardviewer.h"
 #include "gamestate.h"
+#include "sgf.h"
 #include <tuple>
 #include <QDebug>
 #include <QPainter>
@@ -7,14 +8,15 @@
 #include <QMouseEvent>
 #include <QResizeEvent>
 
-BoardViewer::BoardViewer(QWidget *parent, GameState &gameState):
+BoardViewer::BoardViewer(QWidget *parent, AppState &appState):
     QWidget(parent),
     mMouseRow(-1),
     mMouseCol(-1),
     mBoardImage(":/images/board.png"),
     mBlackImage(":/images/black.png"),
     mWhiteImage(":/images/white.png"),
-    mGameState(gameState)
+    mAppState(appState),
+    mGameState(appState.gameState)
 {
     setMouseTracking(true);
     setMinimumSize(608, 608);
@@ -27,6 +29,12 @@ void BoardViewer::next() {
 
 void BoardViewer::previous() {
     mGameState.previous();
+    update();
+}
+
+void BoardViewer::save() {
+    if (!writeSGF(mAppState.sgfFile.c_str(), mGameState))
+        qWarning() << "Failed to write sgf file" << mAppState.sgfFile.c_str();
     update();
 }
 

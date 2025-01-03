@@ -3,17 +3,19 @@
 
 #include <QWidget>
 #include <QPixmap>
+#include "appstate.h"
 #include "gamestate.h"
 
 class BoardViewer : public QWidget {
     Q_OBJECT
 
 public:
-    BoardViewer(QWidget *parent, GameState &gameState);
+    BoardViewer(QWidget *parent, AppState &appState);
 
 public slots:
     void next(void);
     void previous(void);
+    void save(void);
 
 protected:
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -27,6 +29,7 @@ private:
     QPixmap mBoardImage;
     QPixmap mBlackImage;
     QPixmap mWhiteImage;
+    AppState &mAppState;
     GameState &mGameState;
 };
 
