@@ -55,9 +55,9 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
             this->captureMaybe(adj_row, adj_col, true);
     }
 
-    // The move cannot repeat history.
-    for (const Board &b : this->boardHistory) {
-        if (b == this->board) {
+    // Prevent immediate recapture of a stone, to support ko.
+    if (this->boardHistory.size() >= 2) {
+        if (this->board == this->boardHistory[this->boardHistory.size() - 2]) {
             this->board = this->boardHistory.back();
             return;
         }
