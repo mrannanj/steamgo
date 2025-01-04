@@ -106,8 +106,6 @@ vector<tuple<int,int>> GameState::getAdjacents(int row, int col) {
 }
 
 int GameState::captureMaybe(int origRow, int origCol, bool capture) {
-    if (!coordWithinBoard(origRow, origCol))
-        return 0;
     enum Stone groupColor = board[origRow][origCol];
     if (groupColor == Stone::NONE)
         return 0;
