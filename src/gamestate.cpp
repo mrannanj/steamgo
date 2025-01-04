@@ -54,6 +54,16 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
         if (this->board[adj_row][adj_col] != curStone)
             this->captureMaybe(adj_row, adj_col, true);
     }
+
+    // The move cannot repeat history.
+    for (const Board &b : this->boardHistory) {
+        if (b == this->board) {
+            this->board = this->boardHistory.back();
+            return;
+        }
+    }
+
+    this->boardHistory.push_back(this->board);
     this->lastStone = curStone;
 
     if (!addToRecord)

@@ -20,9 +20,12 @@ struct Move {
     enum Stone stone = NONE;
 };
 
+using Board = std::array<std::array<Stone, kBoardSize>, kBoardSize>;
+
 struct GameState {
     enum Stone lastStone = NONE;
-    std::array<std::array<Stone, kBoardSize>, kBoardSize> board = {NONE};
+    Board board = {NONE};
+    std::vector<Board> boardHistory;
     std::vector<Move> moves;
     int moveIdx = 0;
 
