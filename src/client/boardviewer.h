@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QPixmap>
-#include "appstate.h"
+#include "client/appstate.h"
 #include "common/gamestate.h"
 
 class BoardViewer : public QWidget {

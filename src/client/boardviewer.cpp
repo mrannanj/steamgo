@@ -1,4 +1,4 @@
-#include "boardviewer.h"
+#include "client/boardviewer.h"
 #include "common/gamestate.h"
 #include "common/sgf.h"
 #include <tuple>
