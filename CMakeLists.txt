@@ -32,6 +32,14 @@ target_link_libraries(steamgo PRIVATE $<TARGET_OBJECTS:steamgo_common>)
 target_include_directories(steamgo PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
 
+# Server
+add_executable(steamgo_server
+    src/server/main.cpp
+)
+target_link_libraries(steamgo_server PRIVATE $<TARGET_OBJECTS:steamgo_common>)
+target_include_directories(steamgo_server PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
+
 # Tests
 include(FetchContent)
 FetchContent_Declare(
