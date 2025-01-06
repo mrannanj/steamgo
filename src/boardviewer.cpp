@@ -1,6 +1,6 @@
 #include "boardviewer.h"
-#include "gamestate.h"
-#include "sgf.h"
+#include "common/gamestate.h"
+#include "common/sgf.h"
 #include <tuple>
 #include <QDebug>
 #include <QPainter>

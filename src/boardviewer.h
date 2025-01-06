@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QPixmap>
 #include "appstate.h"
-#include "gamestate.h"
+#include "common/gamestate.h"
 
 class BoardViewer : public QWidget {
     Q_OBJECT

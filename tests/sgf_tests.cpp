@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <sstream>
-#include "gamestate.h"
-#include "sgf.h"
+#include "common/gamestate.h"
+#include "common/sgf.h"
 
 using namespace std;
 

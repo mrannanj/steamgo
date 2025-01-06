@@ -6,7 +6,7 @@
 #include <string>
 #include "appstate.h"
 #include "mainwindow.h"
-#include "sgf.h"
+#include "common/sgf.h"
 
 using std::string, std::vector;
 
