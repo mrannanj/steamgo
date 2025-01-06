@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "client/mainwindow.h"
 
 MainWindow::MainWindow(AppState &appState, QWidget *parent):
     QWidget(parent),

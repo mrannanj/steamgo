@@ -4,8 +4,8 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QVBoxLayout>
-#include "appstate.h"
-#include "boardviewer.h"
+#include "client/appstate.h"
+#include "client/boardviewer.h"
 
 class MainWindow : public QWidget {
     Q_OBJECT

@@ -24,9 +24,9 @@ set(CMAKE_AUTOUIC ON)
 qt_add_executable(steamgo
     src/common/gamestate.cpp
     src/common/sgf.cpp
-    src/main.cpp
-    src/mainwindow.cpp
-    src/boardviewer.cpp
+    src/client/main.cpp
+    src/client/mainwindow.cpp
+    src/client/boardviewer.cpp
     resources.qrc
 )
 

@@ -4,8 +4,8 @@
 #include <QDebug>
 #include <cstring>
 #include <string>
-#include "appstate.h"
-#include "mainwindow.h"
+#include "client/appstate.h"
+#include "client/mainwindow.h"
 #include "common/sgf.h"
 
 using std::string, std::vector;
