@@ -1,7 +1,7 @@
 #ifndef APPSTATE_H
 #define APPSTATE_H
 
-#include "gamestate.h"
+#include "common/gamestate.h"
 #include <string>
 
 struct AppState {

@@ -1,4 +1,4 @@
-#include "sgf.h"
+#include "common/sgf.h"
 #include <fstream>
 #include <sstream>
 

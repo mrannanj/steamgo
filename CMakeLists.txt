@@ -22,21 +22,23 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 qt_add_executable(steamgo
-    src/gamestate.cpp
+    src/common/gamestate.cpp
+    src/common/sgf.cpp
     src/main.cpp
     src/mainwindow.cpp
     src/boardviewer.cpp
-    src/sgf.cpp
     resources.qrc
 )
 
 target_link_libraries(steamgo PRIVATE Qt6::Widgets)
+target_include_directories(steamgo PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
 
 enable_testing()
 add_executable(sgf_tests
     tests/sgf_tests.cpp
-    src/gamestate.cpp
-    src/sgf.cpp
+    src/common/gamestate.cpp
+    src/common/sgf.cpp
 )
 target_include_directories(sgf_tests PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
