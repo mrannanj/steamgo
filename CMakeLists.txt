@@ -13,6 +13,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
+add_library(steamgo_common OBJECT
+    src/common/gamestate.cpp
+    src/common/sgf.cpp)
+target_include_directories(steamgo_common PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
+
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
@@ -22,8 +28,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 qt_add_executable(steamgo
-    src/common/gamestate.cpp
-    src/common/sgf.cpp
     src/client/main.cpp
     src/client/mainwindow.cpp
     src/client/boardviewer.cpp
@@ -31,19 +35,19 @@ qt_add_executable(steamgo
 )
 
 target_link_libraries(steamgo PRIVATE Qt6::Widgets)
+target_link_libraries(steamgo PRIVATE $<TARGET_OBJECTS:steamgo_common>)
 target_include_directories(steamgo PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
 
 enable_testing()
 add_executable(sgf_tests
     tests/sgf_tests.cpp
-    src/common/gamestate.cpp
-    src/common/sgf.cpp
 )
 target_include_directories(sgf_tests PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
-target_compile_definitions(sgf_tests PUBLIC
+target_compile_definitions(sgf_tests PRIVATE
     PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
-target_link_libraries(sgf_tests GTest::gtest_main)
+target_link_libraries(sgf_tests PRIVATE $<TARGET_OBJECTS:steamgo_common>)
+target_link_libraries(sgf_tests PRIVATE GTest::gtest_main)
 include(GoogleTest)
 gtest_discover_tests(sgf_tests)
