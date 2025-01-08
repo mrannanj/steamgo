@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     vector<string> args(argv, argv + argc);
     QApplication app(argc, argv);
 
-    AppState appState;
+    AppState appState("localhost:50051");
     if (args.size() == 3) {
         if (args[1] == "-r") {
             if (!readSGF(args[2], appState.gameState)) {
@@ -29,6 +29,7 @@ int main(int argc, char *argv[]) {
             return 1;
         }
     }
+
     MainWindow mainWindow(appState);
     mainWindow.show();
 
