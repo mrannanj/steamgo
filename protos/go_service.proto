@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+service GoService {
+    rpc Move(Coord) returns (Empty) {}
+}
+
+message Coord {
+    int32 row = 1;
+    int32 col = 2;
+}
+
+message Empty {}

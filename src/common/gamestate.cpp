@@ -4,10 +4,10 @@
 
 using std::stack, std::tuple, std::ostream, std::vector;
 
-void GameState::attemptMove(int row, int col, bool addToRecord) {
+bool GameState::attemptMove(int row, int col, bool addToRecord) {
     // Only add the stone if we are looking at the latest board situation.
     if (addToRecord && moveIdx != (int)this->moves.size())
-        return;
+        return false;
 
     enum Stone curStone = Stone::BLACK;
     if (this->lastStone == Stone::BLACK)
@@ -17,7 +17,7 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
     if (row < 0 && col < 0) {
         this->lastStone = curStone;
         if (!addToRecord)
-            return;
+            return true;
         Move move {
             .row = -1,
             .col = -1,
@@ -25,12 +25,12 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
         };
         this->moves.push_back(move);
         this->moveIdx += 1;
-        return;
+        return true;
     }
 
     // Only empty spots can be played in.
     if (this->board[row][col] != Stone:: NONE)
-        return;
+        return false;
 
     // Place the stone on board temporarily.
     this->board[row][col] = curStone;
@@ -46,7 +46,7 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
     // No capture, so check that we have at least one liberty.
     if (!willCapture && captureMaybe(row, col, false) < 0) {
         this->board[row][col] = Stone:: NONE;
-        return;
+        return false;
     }
 
     // Capture adjacent 0 liberty groups.
@@ -59,7 +59,7 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
     if (this->boardHistory.size() >= 2) {
         if (this->board == this->boardHistory[this->boardHistory.size() - 2]) {
             this->board = this->boardHistory.back();
-            return;
+            return false;
         }
     }
 
@@ -67,7 +67,7 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
     this->lastStone = curStone;
 
     if (!addToRecord)
-        return;
+        return true;
     Move move {
         .row = row,
         .col = col,
@@ -75,6 +75,7 @@ void GameState::attemptMove(int row, int col, bool addToRecord) {
     };
     this->moves.push_back(move);
     this->moveIdx += 1;
+    return true;
 }
 
 void GameState::boardAtMove(int idx) {

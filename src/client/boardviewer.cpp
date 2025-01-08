@@ -57,7 +57,8 @@ void BoardViewer::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void BoardViewer::mouseReleaseEvent(QMouseEvent *event) {
-    mGameState.attemptMove(mMouseRow, mMouseCol, true);
+    if (mGameState.attemptMove(mMouseRow, mMouseCol, true))
+        mAppState.goClient.move(mMouseRow, mMouseCol);
     update();
 }
 
