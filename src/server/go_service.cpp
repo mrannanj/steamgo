@@ -9,6 +9,13 @@ using grpc::Status;
 using std::cout, std::endl;
 
 Status GoServiceImpl::Move(ServerContext *context, const Coord *request, Empty *response) {
-    cout << "Move: row " << request->row() << ", col " << request->col() << endl;
-    return Status::OK;
+    Status st;
+    if (mGameState.attemptMove(request->row(), request->col(), true))
+        st = Status::OK;
+    else
+        st = Status::CANCELLED;
+
+    cout << "Move: row " << request->row() << ", col " << request->col()
+         << ", st " << (st.ok() ? "OK" : "FAILED") << endl;
+    return st;
 }
