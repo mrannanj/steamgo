@@ -14,7 +14,7 @@ using std::cerr, std::endl;
 GoServiceClient::GoServiceClient(std::shared_ptr<Channel> channel):
     stub_(GoService::NewStub(channel)) {}
 
-void GoServiceClient::move(int row, int col) {
+bool GoServiceClient::move(int row, int col) {
     Coord request;
     request.set_row(row);
     request.set_col(col);
@@ -23,7 +23,5 @@ void GoServiceClient::move(int row, int col) {
 
     Status status = stub_->Move(&context, request, &response);
 
-    if (!status.ok()) {
-        cerr << "gRPC call failed: " << status.error_message() << endl;
-    }
+    return status.ok();
 }
