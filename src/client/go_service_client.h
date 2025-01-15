@@ -11,9 +11,12 @@
 class GoServiceClient {
 public:
     GoServiceClient(std::shared_ptr<grpc::Channel> channel);
+
+    bool tryConnect(void);
     bool move(int row, int col);
 
 private:
+    std::shared_ptr<grpc::Channel> channel_;
     std::unique_ptr<GoService::Stub> stub_;
 };
 
