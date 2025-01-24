@@ -1,12 +1,26 @@
 syntax = "proto3";
+package go_service;
 
 service GoService {
-    rpc Move(Coord) returns (Empty) {}
+    rpc Hello(Empty) returns (Token) {}
+    rpc MakeMove(Move) returns (Empty) {}
+    rpc Subscribe(Empty) returns (stream Move) {}
 }
 
-message Coord {
+message Move {
     int32 row = 1;
     int32 col = 2;
+    Color color = 3;
 }
 
 message Empty {}
+
+message Token {
+    Color color = 1;
+}
+
+enum Color {
+    NONE = 0;
+    BLACK = 1;
+    WHITE = 2;
+}
