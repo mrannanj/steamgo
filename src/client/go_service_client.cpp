@@ -12,7 +12,12 @@ using grpc::Status;
 using std::cerr, std::endl;
 
 GoServiceClient::GoServiceClient(std::shared_ptr<Channel> channel):
-    stub_(GoService::NewStub(channel)) {}
+    channel_(channel), stub_(GoService::NewStub(channel_))
+{}
+
+bool GoServiceClient::tryConnect() {
+    return channel_->GetState(true) == GRPC_CHANNEL_READY;
+}
 
 bool GoServiceClient::move(int row, int col) {
     Coord request;
