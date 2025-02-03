@@ -63,6 +63,7 @@ void BoardViewer::mouseReleaseEvent(QMouseEvent *event) {
                         << "Boards are out of sync.";
         }
     }
+    mAppState.goClient.subscribe();
     update();
 }
 
