@@ -57,12 +57,7 @@ void BoardViewer::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void BoardViewer::mouseReleaseEvent(QMouseEvent *event) {
-    if (mAppState.goClient.move(mMouseRow, mMouseCol)) {
-        if (!mGameState.attemptMove(mMouseRow, mMouseCol, true)) {
-            qCritical() << "Server accepted a move we did not. "
-                        << "Boards are out of sync.";
-        }
-    }
+    mGameState.attemptMove(mMouseRow, mMouseCol, true);
     update();
 }
 

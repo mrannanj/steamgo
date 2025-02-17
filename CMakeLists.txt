@@ -12,28 +12,6 @@ add_library(steamgo_common OBJECT
 target_include_directories(steamgo_common PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
 
-# gRPC and Protobuf
-find_package(Protobuf REQUIRED)
-find_package(gRPC REQUIRED)
-find_package(Threads)
-
-set(PROTO_FILES
-    protos/go_service.proto
-)
-add_library(steamgo_proto OBJECT ${PROTO_FILES})
-target_link_libraries(steamgo_proto PRIVATE
-    protobuf::libprotobuf
-    gRPC::grpc
-    gRPC::grpc++
-)
-target_include_directories(steamgo_proto PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-get_target_property(grpc_cpp_plugin_location gRPC::grpc_cpp_plugin LOCATION)
-protobuf_generate(TARGET steamgo_proto LANGUAGE cpp)
-protobuf_generate(TARGET steamgo_proto LANGUAGE grpc
-    GENERATE_EXTENSIONS .grpc.pb.h .grpc.pb.cc
-    PLUGIN "protoc-gen-grpc=${grpc_cpp_plugin_location}"
-)
-
 # Qt6 client
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
@@ -48,38 +26,22 @@ qt_add_executable(steamgo
     src/client/main.cpp
     src/client/mainwindow.cpp
     src/client/boardviewer.cpp
-    src/client/go_service_client.cpp
     resources.qrc
 )
 target_link_libraries(steamgo PRIVATE Qt6::Widgets)
 target_link_libraries(steamgo PRIVATE $<TARGET_OBJECTS:steamgo_common>)
 target_include_directories(steamgo PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
-
 target_include_directories(steamgo PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-target_link_libraries(steamgo PRIVATE
-    protobuf::libprotobuf
-    gRPC::grpc
-    gRPC::grpc++
-)
-target_link_libraries(steamgo PRIVATE $<TARGET_OBJECTS:steamgo_proto>)
 
 # Server
 add_executable(steamgo_server
     src/server/main.cpp
-    src/server/go_service.cpp
 )
 target_include_directories(steamgo_server PRIVATE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
 target_link_libraries(steamgo_server PRIVATE $<TARGET_OBJECTS:steamgo_common>)
-
 target_include_directories(steamgo_server PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-target_link_libraries(steamgo_server PRIVATE
-    protobuf::libprotobuf
-    gRPC::grpc
-    gRPC::grpc++
-)
-target_link_libraries(steamgo_server PRIVATE $<TARGET_OBJECTS:steamgo_proto>)
 
 # Tests
 include(FetchContent)
